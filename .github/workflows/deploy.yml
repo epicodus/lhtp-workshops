@@ -23,16 +23,15 @@ jobs:
 
     - name: Checkout gh-pages branch
       run: |
-        # git fetch origin gh-pages
         git checkout gh-pages
 
-    -name: ls ./
+    - name: ls ./
       run: ls ./
 
-    -name: ls ./main-repo/
+    - name: ls ./main-repo/
       run: ls ./main-repo/
 
-    -name: ls ./main-repo/all-builds/
+    - name: ls ./main-repo/all-builds/
       run: ls ./main-repo/all-builds/
 
     - name: Copy directory
