@@ -1,0 +1,43 @@
+# Sub-workflow to pull from main repo and deploy to gh-pages branch
+name: Deploy LHTP workshops site manually
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        ref: 'gh-pages'
+
+    - name: Checkout main repo's gh-pages branch
+      uses: actions/checkout@v3
+      with:
+        repository: 'epicodus/lhtp'
+        ref: 'gh-pages'
+        path: 'main-repo'
+
+    - name: Setup node
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16
+
+    - name: Copy directory
+      run: cp -R ./main-repo/build-workshops/* .
+
+    - name: Replace CNAME
+      run: echo "workshops.learnhowtoprogram.com" > CNAME
+
+    - name: Delete main-repo directory
+      run: rm -rf ./main-repo
+
+    - name: Commit & Push
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git add .
+        git commit -m "Deploy to gh-pages"
+        git push origin +gh-pages
